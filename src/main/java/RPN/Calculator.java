@@ -7,10 +7,8 @@ public class Calculator {
     public String[] elements;// = a.split(" ");
     protected ConversionToRPN conversionToRPN;
     int result;
-
+    Stack<Integer> stack = new Stack();
     private String rpn1;
-    Stack<Integer> stackNum = new Stack();
-//      String line1 = "2 1 + 3 *";
 
     public Calculator(ConversionToRPN conversionToRPN, String rpn) {
         this.conversionToRPN = conversionToRPN;
@@ -20,33 +18,46 @@ public class Calculator {
 
     public int count(String[] elements) {
         for (String element : elements) {
-
+//            try {
+//                element.matches("[a-zA-Z]+");
+//            } catch (IllegalArgumentException ex) {
+//                System.out.println("Incorrect argument (only numbers and operators can contain the exception)");
+//                throw new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)");
+//            }
+            if(element.matches("[a-zA-Z]+")){throw new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)");}
             String operators = "+-*/";
+
             if (!operators.contains(element)) {
-                stackNum.push(Integer.valueOf(element));
+                stack.push(Integer.valueOf(element));
             } else {
-                int value1 = stackNum.pop();
-                int value2 = stackNum.pop();
+                int value1 = stack.pop();
+                int value2 = stack.pop();
 
                 switch (element) {
+
                     case "+":
-                        stackNum.push(value2 + value1);
+                        stack.push(value2 + value1);
                         break;
                     case "-":
-                        stackNum.push(value2 - value1);
+                        stack.push(value2 - value1);
                         break;
                     case "*":
-                        stackNum.push(value2 * value1);
+                        stack.push(value2 * value1);
                         break;
                     case "/":
-                        stackNum.push(value2 / value1);
+                        try {
+                            stack.push(value2 / value1);
+                        } catch (ArithmeticException ex) {
+                            System.out.println("Divided by zero!");
+                            throw new ArithmeticException();
+                        }
                         break;
                     default:
                         System.out.println("Incorrect operator");
                 }
             }
         }
-        result = stackNum.pop();
+        result = stack.pop();
         return result;
     }
 
@@ -55,3 +66,4 @@ public class Calculator {
         System.out.println(format);
     }
 }
+
