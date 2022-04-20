@@ -1,4 +1,4 @@
-package RPN;
+package org.example;
 
 import java.util.Stack;
 
