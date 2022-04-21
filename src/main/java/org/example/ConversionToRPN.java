@@ -8,9 +8,6 @@ public class ConversionToRPN {
 
     private Input input;
 
-//    public ConversionToRPN() {
-//    }
-
     public ConversionToRPN(Input input) {
         this.input = input;
     }
@@ -28,7 +25,7 @@ public class ConversionToRPN {
     }
 
     public String convert() {
-//        int lengthEx = expression.length();
+
         int lengthEx = input.getExpression().length();
         Stack<String> reversePolish = new Stack<String>();
         Stack<Character> operator = new Stack<Character>();

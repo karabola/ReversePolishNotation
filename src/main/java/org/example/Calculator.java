@@ -1,5 +1,8 @@
 package org.example;
 
+import java.io.PrintStream;
+import java.util.EmptyStackException;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class Calculator {
@@ -9,6 +12,7 @@ public class Calculator {
     int result;
     Stack<Integer> stack = new Stack();
     private String rpn1;
+    private Input input;
 
     public Calculator(ConversionToRPN conversionToRPN, String rpn) {
         this.conversionToRPN = conversionToRPN;
@@ -18,18 +22,17 @@ public class Calculator {
 
     public int count(String[] elements) {
         for (String element : elements) {
-//            try {
-//                element.matches("[a-zA-Z]+");
-//            } catch (IllegalArgumentException ex) {
-//                System.out.println("Incorrect argument (only numbers and operators can contain the exception)");
-//                throw new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)");
-//            }
-            if(element.matches("[a-zA-Z]+")){throw new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)");}
+
+            if(element.matches("[a-zA-Z]+")){
+                throw new IllegalArgumentException(
+                        "Incorrect argument (only numbers and operators can contain the exception)");}
             String operators = "+-*/";
 
             if (!operators.contains(element)) {
                 stack.push(Integer.valueOf(element));
             } else {
+
+                if(stack.isEmpty()){System.out.println("First argument must be a number! ");throw new EmptyStackException(); }
                 int value1 = stack.pop();
                 int value2 = stack.pop();
 
@@ -65,5 +68,7 @@ public class Calculator {
         String format = String.format("The reverse polish notation of the expression is: %n \" %s \" %nThe result of the expression is %d.", rpn1, result);
         System.out.println(format);
     }
-}
+
+    }
+
 
