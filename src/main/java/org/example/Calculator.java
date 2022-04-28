@@ -1,13 +1,11 @@
 package org.example;
 
-import java.io.PrintStream;
 import java.util.EmptyStackException;
-import java.util.Scanner;
 import java.util.Stack;
 
 public class Calculator {
 
-    public String[] elements;// = a.split(" ");
+    public String[] elements;
     protected ConversionToRPN conversionToRPN;
     int result;
     Stack<Integer> stack = new Stack();
@@ -22,22 +20,26 @@ public class Calculator {
 
     public int count(String[] elements) {
         for (String element : elements) {
+//            if(element.matches("-?\\d+(\\.\\d+)?")) {stack.add(Integer.parseInt(element));}
 
-            if(element.matches("[a-zA-Z]+")){
+            if (element.matches("[a-zA-Z]+")) {
                 throw new IllegalArgumentException(
-                        "Incorrect argument (only numbers and operators can contain the exception)");}
+                        "Incorrect argument (only numbers and operators can contain the exception)");
+            }
             String operators = "+-*/";
 
             if (!operators.contains(element)) {
                 stack.push(Integer.valueOf(element));
             } else {
 
-                if(stack.isEmpty()){System.out.println("First argument must be a number! ");throw new EmptyStackException(); }
+                if (stack.isEmpty()) {
+                    System.out.println("First argument must be a number! ");
+                    throw new EmptyStackException();
+                }
                 int value1 = stack.pop();
                 int value2 = stack.pop();
 
                 switch (element) {
-
                     case "+":
                         stack.push(value2 + value1);
                         break;
@@ -69,6 +71,6 @@ public class Calculator {
         System.out.println(format);
     }
 
-    }
+}
 
 

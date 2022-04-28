@@ -10,16 +10,21 @@ public class Main {
             Input input = new Input(System.in, System.out);
             input.start();
 
-            ConversionToRPN conversionToRPN = new ConversionToRPN(input);
-            conversionToRPN.convert();
+            String expression = input.getExpression();
+            if (expression != null && !expression.isEmpty()) {
+                ConversionToRPN conversionToRPN = new ConversionToRPN(input);
+                conversionToRPN.convert();
 
-            Calculator calculator = new Calculator(conversionToRPN, conversionToRPN.rpn);
-            calculator.count(calculator.elements);
-            calculator.print();
+                Calculator calculator = new Calculator(conversionToRPN, conversionToRPN.rpn);
+                calculator.count(calculator.elements);
+                calculator.print();
+            } else {
+                System.out.println("Input should not be empty. Try again and enter an expression.");
+                continue;
+            }
 
-            Scanner scan1 = new Scanner(System.in);
             System.out.println("Exit? Y-> yes; N-> no");
-            String question = scan1.nextLine();
+            String question = new Scanner(System.in).nextLine();
             if (question.equals("y")) {
                 break;
             }
