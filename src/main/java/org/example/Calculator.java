@@ -6,19 +6,17 @@ import java.util.Stack;
 public class Calculator {
 
     public String[] elements;
-    protected ConversionToRPN conversionToRPN;
-    int result;
+    private int result;
     Stack<Integer> stack = new Stack();
     private String rpn1;
     private Input input;
 
-    public Calculator(ConversionToRPN conversionToRPN, String rpn) {
-        this.conversionToRPN = conversionToRPN;
+    public Calculator(String rpn) {
         this.rpn1 = rpn;
-        elements = rpn1.split(" ");
     }
 
-    public int count(String[] elements) {
+    public int count() {
+        elements = rpn1.split(" ");
         for (String element : elements) {
 //            if(element.matches("-?\\d+(\\.\\d+)?")) {stack.add(Integer.parseInt(element));}
 
