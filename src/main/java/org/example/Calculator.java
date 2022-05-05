@@ -5,39 +5,42 @@ import java.util.Stack;
 
 public class Calculator {
 
-    public String[] elements;
     private int result;
-    Stack<Integer> stack = new Stack();
-    private String rpn1;
-    private Input input;
+    private String rpn;
 
     public Calculator(String rpn) {
-        this.rpn1 = rpn;
+        this.rpn = rpn;
     }
 
     public int count() {
-        elements = rpn1.split(" ");
-        for (String element : elements) {
-//            if(element.matches("-?\\d+(\\.\\d+)?")) {stack.add(Integer.parseInt(element));}
 
-            if (element.matches("[a-zA-Z]+")) {
+        String[] elements = rpn.split(" ");
+        Stack<Integer> stack = new Stack();
+
+        for (int i = 0; i < elements.length; i++) {
+
+
+            if (elements[i].matches("[a-zA-Z]+")) {
                 throw new IllegalArgumentException(
                         "Incorrect argument (only numbers and operators can contain the exception)");
             }
-            String operators = "+-*/";
+            String operators = "+-*/#";
+            if (!operators.contains(elements[i])) {
+                stack.push(Integer.valueOf(elements[i]));
 
-            if (!operators.contains(element)) {
-                stack.push(Integer.valueOf(element));
+            } else if (elements[i].equals("#")) {
+                stack.push(0 - (Integer.parseInt(elements[i + 1])));
             } else {
-
                 if (stack.isEmpty()) {
                     System.out.println("First argument must be a number! ");
                     throw new EmptyStackException();
                 }
+
+
                 int value1 = stack.pop();
                 int value2 = stack.pop();
 
-                switch (element) {
+                switch (elements[i]) {
                     case "+":
                         stack.push(value2 + value1);
                         break;
@@ -60,15 +63,16 @@ public class Calculator {
                 }
             }
         }
-        result = stack.pop();
-        return result;
-    }
 
+    result =stack.pop();
+                return result;
+
+
+    }
     public void print() {
-        String format = String.format("The reverse polish notation of the expression is: %n \" %s \" %nThe result of the expression is %d.", rpn1, result);
+        String format = String.format("The reverse polish notation of the expression is: %n \" %s \" %nThe result of the expression is %d.", rpn, result);
         System.out.println(format);
     }
-
 }
 
 

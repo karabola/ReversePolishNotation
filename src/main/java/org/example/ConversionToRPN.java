@@ -4,7 +4,6 @@ import java.util.Stack;
 
 public class ConversionToRPN {
     //(1 + 2*(2 /2))
-
     boolean isNum(char digit) {
         /*if (!digit.matches("-?\\d+(\\.\\d+)?")) {
         return false;
@@ -20,14 +19,10 @@ public class ConversionToRPN {
         String rpn = "";
         Stack<String> reversePolish = new Stack<String>();
         Stack<Character> operator = new Stack<Character>();
-
         operator.push('0');
-
         int lengthEx = expression.length();
-        for (int i = 0; i < lengthEx;) {
-
+        for (int i = 0; i < lengthEx; ) {
             char op = expression.charAt(i);
-
             while (i < lengthEx && op == ' ')
                 i++;
 //                if (i < lengthEx && expression.charAt(i) == ' ') {
@@ -35,16 +30,12 @@ public class ConversionToRPN {
 //                }
             if (i == lengthEx)
                 break;
-
             if (isNum(op)) {
                 String num = "";
                 while (i < lengthEx && isNum(expression.charAt(i)))
                     num += expression.charAt(i++);
                 reversePolish.push(num);
-
             } else if ((isOperator(op))) /*(expression.matches("\\(*+-/\\)"))*/ {
-
-
                 switch (op) {
                     case '(':
                         operator.push(op);
@@ -55,8 +46,7 @@ public class ConversionToRPN {
                         operator.pop();
                         break;
                     case '+':
-                    case '-':
-                        if (operator.peek() == '(')
+                         if (operator.peek() == '(')
                             operator.push(op);
                         else {
                             while (operator.peek() != '0' && operator.peek() != '(')
@@ -64,6 +54,18 @@ public class ConversionToRPN {
                             operator.push(op);
                         }
                         break;
+                    case '-':
+                        if ((expression.charAt(i-1) == '(') && (isNum(expression.charAt(i+1))))
+                            reversePolish.push("#");
+                        else if (operator.peek() == '(')
+                            operator.push(op);
+                        else {
+                            while (operator.peek() != '0' && operator.peek() != '(')
+                                reversePolish.push(Character.toString(operator.pop()));
+                            operator.push(op);
+                        }
+                        break;
+
                     case '*':
                     case '/':
                         if (operator.peek() == '(')

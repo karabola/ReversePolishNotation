@@ -15,8 +15,8 @@ public class Main {
 
                 String rpn = conversionToRPN.convert(expression);
 
-                Calculator calculator = new Calculator(/*conversionToRPN,*/ rpn);
-                calculator.count(/*calculator.elements*/);
+                Calculator calculator = new Calculator( rpn);
+                calculator.count();
                 calculator.print();
             } else {
                 System.out.println("Input should not be empty. Try again and enter an expression.");

@@ -12,32 +12,32 @@ import static org.mockito.Mockito.when;
 
 class ConversionToRPNTest {
 
-    private ConversionToRPN c;
+    private ConversionToRPN conv;
     private Input input = mock(Input.class);
 
     @BeforeEach
     void setUp() {
-        c = new ConversionToRPN(expression);
+        conv = new ConversionToRPN();
     }
 
     @Test
     void isNum_giveFive_true() {
-        when(input.start()).thenReturn("c");
-        assertTrue(c.isNum('5'));
+        when(input.start()).thenReturn("5");
+        assertTrue(conv.isNum('5'));
     }
 
     @Test
     void isOperator_givePlus_true() {
-        c = new ConversionToRPN(input);
+        conv = new ConversionToRPN();
         when(input.start()).thenReturn("c");
-        assertTrue(c.isOperator('+'));
+        assertTrue(conv.isOperator('+'));
     }
 
     @Test
     void convert_giveEquation_equals() {
-        c = new ConversionToRPN(input);
-        when(input.start()/*getExpression()*/).thenReturn("1+2");
-        assertEquals("1 2 +", c.convert());
+        conv = new ConversionToRPN();
+        when(input.start()).thenReturn("1+2");
+        assertEquals("1 2 +", conv.convert(input.start()));
     }
 
     @Test
@@ -45,7 +45,7 @@ class ConversionToRPNTest {
         //given
         when(input.start()).thenThrow(new NullPointerException("Try again and enter an expression"));
         //when
-        Throwable throwable = Assertions.catchThrowable(() -> c.convert());
+        Throwable throwable = Assertions.catchThrowable(() -> conv.convert(input.start()));
        //then
         assertThat(throwable);
     }
