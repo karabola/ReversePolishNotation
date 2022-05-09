@@ -3,11 +3,7 @@ package org.example;
 import java.util.Stack;
 
 public class ConversionToRPN {
-    //(1 + 2*(2 /2))
     boolean isNum(char digit) {
-        /*if (!digit.matches("-?\\d+(\\.\\d+)?")) {
-        return false;
-    }else {return true;}}*/
         return digit - '0' >= 0 && digit - '0' <= 100;
     }
 
@@ -17,74 +13,77 @@ public class ConversionToRPN {
 
     public String convert(String expression) {
         String rpn = "";
-        Stack<String> reversePolish = new Stack<String>();
-        Stack<Character> operator = new Stack<Character>();
-        operator.push('0');
+        Stack<String> rpnStack = new Stack<String>();
+        Stack<Character> operatorStack = new Stack<Character>();
+        operatorStack.push('0');
         int lengthEx = expression.length();
+
         for (int i = 0; i < lengthEx; ) {
-            char op = expression.charAt(i);
-            while (i < lengthEx && op == ' ')
+            char element = expression.charAt(i);
+            while (i < lengthEx && element == ' ')
                 i++;
-//                if (i < lengthEx && expression.charAt(i) == ' ') {
-//                    continue;
-//                }
+
             if (i == lengthEx)
                 break;
-            if (isNum(op)) {
+            if (isNum(element)) {
                 String num = "";
-                while (i < lengthEx && isNum(expression.charAt(i)))
+                if (!rpnStack.isEmpty() && rpnStack.peek().contains("-") ) {
+                    i++;
+                    continue;
+                }
+                if(i < lengthEx && isNum(expression.charAt(i))) {
                     num += expression.charAt(i++);
-                reversePolish.push(num);
-            } else if ((isOperator(op))) /*(expression.matches("\\(*+-/\\)"))*/ {
-                switch (op) {
+                    rpnStack.push(num);
+                }
+            } else if ((isOperator(element))) {
+                switch (element) {
                     case '(':
-                        operator.push(op);
+                        operatorStack.push(element);
                         break;
                     case ')':
-                        while (operator.peek() != '(')
-                            reversePolish.push(Character.toString(operator.pop()));
-                        operator.pop();
+                        if (operatorStack.peek() != '(')
+                            rpnStack.push(Character.toString(operatorStack.pop()));
+                        operatorStack.pop();
                         break;
                     case '+':
-                         if (operator.peek() == '(')
-                            operator.push(op);
+                        if (operatorStack.peek() == '(')
+                            operatorStack.push(element);
                         else {
-                            while (operator.peek() != '0' && operator.peek() != '(')
-                                reversePolish.push(Character.toString(operator.pop()));
-                            operator.push(op);
+                            while (operatorStack.peek() != '0' && operatorStack.peek() != '(')
+                                rpnStack.push(Character.toString(operatorStack.pop()));
+                            operatorStack.push(element);
                         }
                         break;
                     case '-':
-                        if ((expression.charAt(i-1) == '(') && (isNum(expression.charAt(i+1))))
-                            reversePolish.push("#");
-                        else if (operator.peek() == '(')
-                            operator.push(op);
+                        if ((expression.charAt(i - 1) == '(') && (isNum(expression.charAt(i + 1)))) {
+                            rpnStack.push("-" + (expression.charAt(i + 1)));
+                        } else if (operatorStack.peek() == '(')
+                            operatorStack.push(element);
                         else {
-                            while (operator.peek() != '0' && operator.peek() != '(')
-                                reversePolish.push(Character.toString(operator.pop()));
-                            operator.push(op);
+                            while (operatorStack.peek() != '0' && operatorStack.peek() != '(')
+                                rpnStack.push(Character.toString(operatorStack.pop()));
+                            operatorStack.push(element);
                         }
                         break;
-
                     case '*':
                     case '/':
-                        if (operator.peek() == '(')
-                            operator.push(op);
+                        if (operatorStack.peek() == '(')
+                            operatorStack.push(element);
                         else {
-                            while (operator.peek() != '0' && operator.peek() != '+' &&
-                                    operator.peek() != '-' && operator.peek() != '(')
-                                reversePolish.push(Character.toString(operator.pop()));
-                            operator.push(op);
+                            while (operatorStack.peek() != '0' && operatorStack.peek() != '+' &&
+                                    operatorStack.peek() != '-' && operatorStack.peek() != '(')
+                                rpnStack.push(Character.toString(operatorStack.pop()));
+                            operatorStack.push(element);
                         }
                         break;
                 }
                 i++;
             }
         }
-        while (operator.peek() != '0')
-            reversePolish.push(Character.toString(operator.pop()));
-        while (!reversePolish.isEmpty())
-            rpn = rpn.length() == 0 ? reversePolish.pop() + rpn : reversePolish.pop() + " " + rpn;
+        while (operatorStack.peek() != '0')
+            rpnStack.push(Character.toString(operatorStack.pop()));
+        while (!rpnStack.isEmpty())
+            rpn = rpn.length() == 0 ? rpnStack.pop() + rpn : rpnStack.pop() + " " + rpn;
         return rpn;
     }
 }
