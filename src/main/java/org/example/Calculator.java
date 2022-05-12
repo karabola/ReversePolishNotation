@@ -5,70 +5,61 @@ import java.util.Stack;
 
 public class Calculator {
 
-    public String[] elements;
     private int result;
-    Stack<Integer> stack = new Stack();
-    private String rpn1;
-    private Input input;
+    private String rpn;
 
     public Calculator(String rpn) {
-        this.rpn1 = rpn;
+        this.rpn = rpn;
     }
 
     public int count() {
-        elements = rpn1.split(" ");
-        for (String element : elements) {
-//            if(element.matches("-?\\d+(\\.\\d+)?")) {stack.add(Integer.parseInt(element));}
 
-            if (element.matches("[a-zA-Z]+")) {
-                throw new IllegalArgumentException(
-                        "Incorrect argument (only numbers and operators can contain the exception)");
-            }
+        String[] elements = rpn.split(" ");
+        Stack<Integer> stack = new Stack();
+
+        for (int i = 0; i < elements.length; i++) {
             String operators = "+-*/";
 
-            if (!operators.contains(element)) {
-                stack.push(Integer.valueOf(element));
-            } else {
-
-                if (stack.isEmpty()) {
-                    System.out.println("First argument must be a number! ");
-                    throw new EmptyStackException();
-                }
-                int value1 = stack.pop();
-                int value2 = stack.pop();
-
-                switch (element) {
-                    case "+":
-                        stack.push(value2 + value1);
-                        break;
-                    case "-":
-                        stack.push(value2 - value1);
-                        break;
-                    case "*":
-                        stack.push(value2 * value1);
-                        break;
-                    case "/":
-                        try {
-                            stack.push(value2 / value1);
-                        } catch (ArithmeticException ex) {
-                            System.out.println("Divided by zero!");
-                            throw new ArithmeticException();
-                        }
-                        break;
-                    default:
-                        System.out.println("Incorrect operator");
-                }
+            if (elements[i].matches("[a-zA-Z]+")) {
+                throw new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)");
             }
-        }
-        result = stack.pop();
-        return result;
-    }
+                if (!operators.contains(elements[i])) {
+                    stack.push(Integer.valueOf(elements[i]));}
+                 else {
+                    int value1= stack.pop();
+                    int value2= stack.pop();
 
-    public void print() {
-        String format = String.format("The reverse polish notation of the expression is: %n \" %s \" %nThe result of the expression is %d.", rpn1, result);
-        System.out.println(format);
-    }
-
+                    switch (elements[i]) {
+                        case "+":
+                            stack.push(value2 + value1);
+                            break;
+                        case "-":
+                            stack.push(value2 - value1);
+                            break;
+                        case "*":
+                            stack.push(value2 * value1);
+                            break;
+                        case "/":
+                            try {
+                                stack.push(value2 / value1);
+                            } catch (ArithmeticException ex) {
+                                System.out.println("Divided by zero!");
+                                throw new ArithmeticException();
+                            }
+                            break;
+                        default:
+                            System.out.println("Incorrect operator");
+                    }
+            }
 }
+            result = stack.pop();
+            return result;
+        }
+
+        public void print () {
+            String format = String.format("The reverse polish notation of the expression is: %n \" %s \" %nThe result of the expression is %d.", rpn, result);
+            System.out.println(format);
+        }
+    }
 
 

@@ -1,10 +1,10 @@
 package org.example;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -12,41 +12,47 @@ import static org.mockito.Mockito.when;
 
 class ConversionToRPNTest {
 
-    private ConversionToRPN c;
+    private ConversionToRPN conv;
     private Input input = mock(Input.class);
 
     @BeforeEach
     void setUp() {
-        c = new ConversionToRPN(expression);
+        conv = new ConversionToRPN();
     }
 
     @Test
     void isNum_giveFive_true() {
-        when(input.start()).thenReturn("c");
-        assertTrue(c.isNum('5'));
+        when(input.start()).thenReturn("5");
+        assertTrue(conv.isNum('5'));
     }
 
     @Test
     void isOperator_givePlus_true() {
-        c = new ConversionToRPN(input);
+        conv = new ConversionToRPN();
         when(input.start()).thenReturn("c");
-        assertTrue(c.isOperator('+'));
+        assertTrue(conv.isOperator('+'));
     }
 
     @Test
     void convert_giveEquation_equals() {
-        c = new ConversionToRPN(input);
-        when(input.start()/*getExpression()*/).thenReturn("1+2");
-        assertEquals("1 2 +", c.convert());
+        conv = new ConversionToRPN();
+        when(input.start()).thenReturn("1+2");
+        assertEquals("1 2 +", conv.convert(input.start()));
     }
 
+    @Test
+    void convert_giveEquationWithNegative_equals() {
+        conv = new ConversionToRPN();
+        when(input.start()).thenReturn("2+(-1)");
+        assertEquals("2 -1 +", conv.convert(input.start()));
+    }
     @Test
     void convert_inputIsEmpty_throwException() {
         //given
         when(input.start()).thenThrow(new NullPointerException("Try again and enter an expression"));
         //when
-        Throwable throwable = Assertions.catchThrowable(() -> c.convert());
-       //then
+        Throwable throwable = Assertions.catchThrowable(() -> conv.convert(input.start()));
+        //then
         assertThat(throwable);
     }
 
