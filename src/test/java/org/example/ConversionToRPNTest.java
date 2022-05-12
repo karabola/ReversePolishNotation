@@ -1,10 +1,10 @@
 package org.example;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -41,12 +41,18 @@ class ConversionToRPNTest {
     }
 
     @Test
+    void convert_giveEquationWithNegative_equals() {
+        conv = new ConversionToRPN();
+        when(input.start()).thenReturn("2+(-1)");
+        assertEquals("2 -1 +", conv.convert(input.start()));
+    }
+    @Test
     void convert_inputIsEmpty_throwException() {
         //given
         when(input.start()).thenThrow(new NullPointerException("Try again and enter an expression"));
         //when
         Throwable throwable = Assertions.catchThrowable(() -> conv.convert(input.start()));
-       //then
+        //then
         assertThat(throwable);
     }
 
