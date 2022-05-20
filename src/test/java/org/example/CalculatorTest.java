@@ -36,7 +36,7 @@ class CalculatorTest {
     @Test
     void count_divideByZero_throwException() {
         //given
-        when(conv.convert(input.start())).thenThrow(new ArithmeticException("Divided by zero!"));
+        when(conv.convert(input.retrieveRawExpression())).thenThrow(new ArithmeticException("Divided by zero!"));
         //when
         Throwable throwable = Assertions.catchThrowable(() -> calc.count());
         //then
@@ -46,7 +46,7 @@ class CalculatorTest {
     @Test
     void count_lettersUsing_throwException() {
         //given
-        when(conv.convert(input.start())).thenThrow(new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)"));
+        when(conv.convert(input.retrieveRawExpression())).thenThrow(new IllegalArgumentException("Incorrect argument (only numbers and operators can contain the exception)"));
         //when
         Throwable throwable = Assertions.catchThrowable(() -> calc.count());
         //then

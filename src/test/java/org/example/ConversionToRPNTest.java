@@ -22,36 +22,36 @@ class ConversionToRPNTest {
 
     @Test
     void isNum_giveFive_true() {
-        when(input.start()).thenReturn("5");
-        assertTrue(conv.isNum('5'));
+        when(input.retrieveRawExpression()).thenReturn("5");
+        assertTrue(conv.isNumber('5'));
     }
 
     @Test
     void isOperator_givePlus_true() {
         conv = new ConversionToRPN();
-        when(input.start()).thenReturn("c");
+        when(input.retrieveRawExpression()).thenReturn("c");
         assertTrue(conv.isOperator('+'));
     }
 
     @Test
     void convert_giveEquation_equals() {
         conv = new ConversionToRPN();
-        when(input.start()).thenReturn("1+2");
-        assertEquals("1 2 +", conv.convert(input.start()));
+        when(input.retrieveRawExpression()).thenReturn("1+2");
+        assertEquals("1 2 +", conv.convert(input.retrieveRawExpression()));
     }
 
     @Test
     void convert_giveEquationWithNegative_equals() {
         conv = new ConversionToRPN();
-        when(input.start()).thenReturn("2+(-1)");
-        assertEquals("2 -1 +", conv.convert(input.start()));
+        when(input.retrieveRawExpression()).thenReturn("(-1)+2");
+        assertEquals("-1 2 +", conv.convert(input.retrieveRawExpression()));
     }
     @Test
     void convert_inputIsEmpty_throwException() {
         //given
-        when(input.start()).thenThrow(new NullPointerException("Try again and enter an expression"));
+        when(input.retrieveRawExpression()).thenThrow(new NullPointerException("Try again and enter an expression"));
         //when
-        Throwable throwable = Assertions.catchThrowable(() -> conv.convert(input.start()));
+        Throwable throwable = Assertions.catchThrowable(() -> conv.convert(input.retrieveRawExpression()));
         //then
         assertThat(throwable);
     }
