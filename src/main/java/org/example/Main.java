@@ -9,7 +9,7 @@ public class Main {
         ConversionToRPN conversionToRPN = new ConversionToRPN();
         while (true) {
             Input input = new Input(System.in, System.out);
-            String expression = input.start();
+            String expression = input.retrieveRawExpression();
 
             if (expression != null && !expression.isEmpty()) {
 

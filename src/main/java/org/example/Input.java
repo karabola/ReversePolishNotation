@@ -13,7 +13,7 @@ public class Input {
         this.out = out;
     }
 
-    public String start() {
+    public String retrieveRawExpression() {
         out.println("Enter an expression!");
         return scan.nextLine();
     }
