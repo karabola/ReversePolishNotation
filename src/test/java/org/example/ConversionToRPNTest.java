@@ -29,22 +29,52 @@ class ConversionToRPNTest {
     @Test
     void isOperator_givePlus_true() {
         conv = new ConversionToRPN();
-        when(input.retrieveRawExpression()).thenReturn("c");
+        when(input.retrieveRawExpression()).thenReturn("+");
         assertTrue(conv.isOperator('+'));
     }
 
     @Test
-    void convert_giveEquation_equals() {
+    void convert_giveTwoMinusOne_equalsTwoOneMinus() {
         conv = new ConversionToRPN();
-        when(input.retrieveRawExpression()).thenReturn("1+2");
-        assertEquals("1 2 +", conv.convert(input.retrieveRawExpression()));
+        when(input.retrieveRawExpression()).thenReturn("2-1");
+        assertEquals("2 1 -", conv.convert(input.retrieveRawExpression()));
     }
 
     @Test
-    void convert_giveEquationWithNegative_equals() {
+    void convert_giveMinusOneInBracketsPlusTwo_equalsNegativeOneTwoPlus() {
         conv = new ConversionToRPN();
         when(input.retrieveRawExpression()).thenReturn("(-1)+2");
         assertEquals("-1 2 +", conv.convert(input.retrieveRawExpression()));
+    }
+    @Test
+    void convert_giveNegativeOnePlusTwo_equalsNegativeOneTwoPlus() {
+        conv = new ConversionToRPN();
+        when(input.retrieveRawExpression()).thenReturn("-1+2");
+        assertEquals("-1 2 +", conv.convert(input.retrieveRawExpression()));
+    }
+    @Test
+    void convert_giveTwoTimesNegativeTwo_equalsTwoNegativeTwoMultiplicationSign() {
+        conv = new ConversionToRPN();
+        when(input.retrieveRawExpression()).thenReturn("2*(-2)");
+        assertEquals("2 -2 *", conv.convert(input.retrieveRawExpression()));
+    }
+    @Test
+    void convert_giveTwoMinusTwoInBrackets_equalsTwoNegativeTwoMultiplicationSign() {
+        conv = new ConversionToRPN();
+        when(input.retrieveRawExpression()).thenReturn("(2-2)");
+        assertEquals("2 2 -", conv.convert(input.retrieveRawExpression()));
+    }
+    @Test
+    void convert_giveTwoTimesFourminusOneInBrackets_equalsTwoFourOneMinusMultiply() {
+        conv = new ConversionToRPN();
+        when(input.retrieveRawExpression()).thenReturn("2*(4-1)");
+        assertEquals("2 4 1 - *", conv.convert(input.retrieveRawExpression()));
+    }
+    @Test
+    void convert_giveFourMinusOneInBracketsMultiplyThreePlusOneInBrackets_equalsTwoFourOneMinusMultiply() {
+        conv = new ConversionToRPN();
+        when(input.retrieveRawExpression()).thenReturn("(4-1)*(3+1)");
+        assertEquals("4 1 - 3 1 + *", conv.convert(input.retrieveRawExpression()));
     }
     @Test
     void convert_inputIsEmpty_throwException() {

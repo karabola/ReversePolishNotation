@@ -11,16 +11,24 @@ public class ConversionToRPN {
         return sign == '+' || sign == '-' || sign == '*' || sign == '/' || sign == '(' || sign == ')';
     }
 
+    private boolean isNum(char digit) {
+        try {
+            Double.parseDouble(String.valueOf(digit));
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public String convert(String expression) {
         String rpn = "";
         Stack<Character> operatorStack = new Stack<Character>();
         operatorStack.push('0');
         int lengthEx = expression.length();
-        boolean negativeNumber = true;
 
         for (int i = 0; i < lengthEx; ) {
-            char element = expression.charAt(i);
 
+            char element = expression.charAt(i);
             while (i < lengthEx && element == ' ')
                 i++;
 
@@ -28,9 +36,11 @@ public class ConversionToRPN {
                 break;
 
             if (isNumber(element)) {
-                if (i < lengthEx && isNumber(element)) {
+                if (i < lengthEx) {
                     rpn += expression.charAt(i++);
+
                 }
+
             } else if ((isOperator(element))) {
                 switch (element) {
                     case '(':
@@ -48,23 +58,23 @@ public class ConversionToRPN {
                             while (operatorStack.peek() != '0' && operatorStack.peek() != '(')
                                 rpn += " " + operatorStack.pop();
                             operatorStack.push(element);
-                            /*negativeNumber = true;*/
                         }
                         rpn += " ";
                         break;
                     case '-':
-                        if (operatorStack.peek() == '(' && negativeNumber && !rpn.isEmpty()) {
-                            operatorStack.push(element);
-                            rpn += " ";
-                        } else if (operatorStack.peek() == '(' && negativeNumber) {
+                        if (rpn.isEmpty() && operatorStack.peek() == '(') {
                             rpn += element;
-                        } else if (operatorStack.peek() != '0' && operatorStack.peek() != '(') {
+                        } else if (rpn.isEmpty() && operatorStack.peek() == '0') {
+                            rpn += element;
+                        } else if (expression.charAt(i - 1) == '(') {
+                            rpn += "-" + expression.charAt(i + 1);
+                            i++;
+                        } else if (!rpn.isEmpty() && operatorStack.peek() == '0') {
                             operatorStack.push(element);
                             rpn += " ";
-                        } else {
-                            /*negativeNumber = true;*/
-                            rpn += " ";
+                        } else if (!rpn.isEmpty() && operatorStack.peek() == '(') {
                             operatorStack.push(element);
+                            rpn += " ";
                         }
                         break;
                     case '*':
@@ -77,17 +87,12 @@ public class ConversionToRPN {
                                 rpn += " " + operatorStack.pop();
                             operatorStack.push(element);
                         }
-                        negativeNumber = true;
                         rpn += " ";
                         break;
                 }
                 i++;
             } else {
-                if (/*negativeNumber &&*/ element == '-') {
-                    rpn += " ";
-                }
                 rpn += element;
-                negativeNumber = false;
             }
         }
         while (operatorStack.peek() != '0')
